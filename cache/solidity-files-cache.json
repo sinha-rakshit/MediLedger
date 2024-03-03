@@ -1,0 +1,43 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "E:\\MinorProject1\\mediledger\\contracts\\MediLedger.sol": {
+      "lastModificationDate": 1709392473446,
+      "contentHash": "1f27f2ff52d3d667b083b497d003768f",
+      "sourceName": "contracts/MediLedger.sol",
+      "solcConfig": {
+        "version": "0.8.10",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.7.0 <0.9.0"
+      ],
+      "artifacts": [
+        "Doctor",
+        "MediLedger",
+        "Patient",
+        "allDoctors"
+      ]
+    }
+  }
+}
