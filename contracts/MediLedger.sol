@@ -24,7 +24,6 @@ contract MediLedger is allDoctors {
     );
     address public admin;
     address public accounts;
-    address[] public deployedPatients;
 
     constructor() {
         admin = msg.sender;
@@ -36,10 +35,9 @@ contract MediLedger is allDoctors {
         string memory _fid,
         string memory walletid
     ) public {
-        require(msg.sender == admin, "youre not admin");
+        //require(msg.sender == admin, "youre not admin");
         address wid = address(bytes20(bytes(walletid)));
         Patient p = new Patient(_name, _fid, accounts, admin, payable(wid));
-        deployedPatients.push(address(p));
         emit allPatient(_fid, _name, address(p), wid);
     }
 

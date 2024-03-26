@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "E:\\MinorProject1\\mediledger\\contracts\\MediLedger.sol": {
-      "lastModificationDate": 1711388879113,
-      "contentHash": "c24336ab3d3aba9adb5d360778999403",
+      "lastModificationDate": 1711474946190,
+      "contentHash": "29ba8b6bf7b9d3a1f82755ae77a8f168",
       "sourceName": "contracts/MediLedger.sol",
       "solcConfig": {
         "version": "0.8.10",

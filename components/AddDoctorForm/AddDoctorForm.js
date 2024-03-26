@@ -2,82 +2,78 @@ import styled from 'styled-components';
 import FormLeft from './components/FormLeft.js';
 import FormRight from './components/FormRight.js';
 import { createContext, useState } from 'react';
-//import { TailSpin } from 'react-loader-spinner';
-//import { ethers } from 'ethers';
-//import { toast } from 'react-toastify';
+import { TailSpin } from 'react-loader-spinner';
+import { ethers } from 'ethers';
+import { toast } from 'react-toastify';
 import Link from 'next/link.js';
-//import GovernmentBody from '../../artifacts/contracts/TheContractCrew.sol/GovernmentBody.json'
+import MediLedger from '../../artifacts/contracts/MediLedger.sol/MediLedger.json'
 import { useRouter } from 'next/router.js';
+
+const FormState = createContext();
 
 const AddDoctorForm = () => {
    const Router=useRouter();
-//    const [form, setForm] = useState({
-//      category:"Highway",
-//      projectId:"",
-//     _projectName:"",
-//      requiredAmount:"",
-//      deadline:2217839572
+   const [form, setForm] = useState({
+     name:"",
+     did:"",
+    walletid:""
 
-//    });
+   });
 
-//    const [loading , setLoading]= useState(false);
-//    const[address, setAddress]= useState("");
+   const [loading , setLoading]= useState(false);
+   const[address, setAddress]= useState("");
 
-//    const FormHandler = (e) => {
-//       setForm({
-//         ...form,
-//         [e.target.name] : e.target.value
-//       })
-//    }
+   const FormHandler = (e) => {
+      setForm({
+        ...form,
+        [e.target.name] : e.target.value
+      })
+   }
 
 
-//    const proposeDeal = async (e) => {
-//       e.preventDefault();
-//       try{
-//         const provider = new ethers.providers.Web3Provider(window.ethereum);
-//       const signer = provider.getSigner();
+   const registerDoctor = async (e) => {
+      e.preventDefault();
+      try{
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
 
-//       if(form.projectId === ""){
-//         toast.warn(" Project Id Field is Empty");
-//       }else if(form._projectName === "")
-//       {
-//         toast.warn("Project Name field is Empty")
-//       }else if(form.requiredAmount === ""){
-//        toast.warn("Total Expenses field is Empty");
-//       }else if(form.deadline==""){
-//         toast.warn("Deadline field is Empty");
-//     }else{
-//         setLoading(true);
+      if(form.did === ""){
+        toast.warn(" Doctor Id Field is Empty");
+      }else if(form.name === "")
+      {
+        toast.warn("Doctor Name field is Empty")
+      }else if(form.walletid === ""){
+       toast.warn("Wallet id field is Empty");
+      }else{
+        setLoading(true);
 
-//         const contract = new ethers.Contract(
-//           process.env.NEXT_PUBLIC_ADDRESS,
-//           GovernmentBody.abi,
-//           signer
-//         );
+        const contract = new ethers.Contract(
+          process.env.NEXT_PUBLIC_ADDRESS,
+          MediLedger.abi,
+          signer
+        );
 
-//         const contractData= await contract.proposeDeal(
-//           form.category,
-//           form.projectId,
-//           form._projectName,
-//           parseInt(form.requiredAmount),
-//           form.deadline
-//         );
+        const contractData= await contract.addDoctor(
+          form.name,
+          form.did,
+          form.walletid
+        );
 
         
-//         await contractData.wait();
+        await contractData.wait();
 
-//         setAddress(contractData.to);
-//       }
+        setAddress(contractData.to);
+      }
          
-//       }catch{
-//         console.log("You must not be at an official position to be able to propose a contract");
-//       }
-//    }
+      }catch{
+        console.log("You must not be at an official position to be able to add a doctor");
+      }
+   }
  
   return (
-    //<FormState.Provider value={{form, setForm, FormHandler, proposeDeal}}>
+    <FormState.Provider value={{form, setForm, FormHandler, registerDoctor}}>
     <FormWrap>
-        {/* <Main>
+        <Main>
         {loading == true ?
             address==""?
               <Spinner>
@@ -85,16 +81,15 @@ const AddDoctorForm = () => {
               </Spinner> :
               <Address>
                   <TopLeftWrap>
-                     <Paragraph>Dear Contractor </Paragraph>
-                     <Heading>CONGRATULATIONS</Heading>
-                     <Text><Paragraph>Your Deal Has Been Initiated Sucessfully</Paragraph></Text>
+                     <Heading>Hola!!</Heading>
+                     <Text><Paragraph>Doctor has been added Sucessfully</Paragraph></Text>
         
-                     <Caption>MAY THE BEST DEAL GET AWARDED!!</Caption>
-                     <Text><Paragraph>Your deal is deployed at address:  </Paragraph></Text>
+                     <Caption>Have a healthy life!!</Caption>
+                     <Text><Paragraph>The doctor account is now deployed at address:  </Paragraph></Text>
                      <Text><Paragraph>{address}</Paragraph></Text>
                      <Text><Paragraph>We encourage you to keep a copy of it for future reference </Paragraph></Text>
-                     <Text><Paragraph>To see your contract proposal status  </Paragraph></Text>
-                     <ButtonWrap><Link  style={{textDecoration:'none'}} href="/pendingcontract" > <TNavLinks active={Router.pathname=="/pendingcontract"?true:false}>Click Here</TNavLinks></Link></ButtonWrap>
+                     <Text><Paragraph>To see details </Paragraph></Text>
+                     <ButtonWrap><Link  style={{textDecoration:'none'}} href="/" > <TNavLinks active={Router.pathname=="/pendingcontract"?true:false}>Click Here</TNavLinks></Link></ButtonWrap>
                      <Text><Paragraph>Best Of Luck!! </Paragraph></Text>
        
         
@@ -107,13 +102,9 @@ const AddDoctorForm = () => {
                 <FormRight/>
              </FormInputsWrap>
         }
-        </Main> */}
-          <FormInputsWrap>
-                 <FormLeft/>
-                <FormRight/>
-             </FormInputsWrap>
+        </Main>
      </FormWrap>
-   // </FormState.Provider>
+   </FormState.Provider>
   )
 }
 
@@ -262,3 +253,4 @@ margin-bottom: 10px;
 
 
 export default AddDoctorForm
+export {FormState}

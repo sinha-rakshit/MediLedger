@@ -65,7 +65,8 @@ const AddPatientForm = () => {
         console.log("im here 5");
       }
          
-      }catch{
+      } catch(error) {
+        console.error("Error occurred:", error);
         console.log("You must not be at an official position to be able to register a patient");
       }
    }

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
- //import { FormState } from '../Form';
+ import { FormState } from '../AddDoctorForm';
  import { useState, useContext } from 'react';
 
 // const projectId = process.env.NEXT_PUBLIC_IPFS_ID
@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 
 const FormRight = () => {
-  //const Handler = useContext(FormState);
+  const Handler = useContext(FormState);
 
 
 
@@ -44,7 +44,7 @@ const FormRight = () => {
             <Input  name="emergencyContact" type={'number'}  ></Input>
           </RowFirst>
           <RowSecond>
-            <label>PATEINT MARITAL STATUS</label>
+            <label>DOCTOR MARITAL STATUS</label>
             <Select name="maritalStatus">
               <option>Married</option>
               <option>Unmarried</option>
@@ -55,8 +55,8 @@ const FormRight = () => {
       </FormInput>
       
       
-      <Button >
-        Register Pateint
+      <Button onClick={ Handler.registerDoctor}>
+        Register Doctor
       </Button>
     </FormRightWrap>
   )

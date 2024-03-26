@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-//import { FormState } from '../Form';
+ import { FormState } from '../AddDoctorForm';
 import { useContext } from 'react';
 
 const FormLeft = () => {
-  //const Handler = useContext(FormState);
+  const Handler = useContext(FormState);
 
   return (
     <FormLeftWrap>
@@ -16,13 +16,13 @@ const FormLeft = () => {
 
       <FormInput>
         <label>DOCTOR ID</label>
-        <Input  placeholder='Enter Unique Doctor Id Here' name='doctorId' >
+        <Input onChange={Handler.FormHandler} value={Handler.form.did}  placeholder='Enter Unique Doctor Id Here' name='did' >
         </Input>
       </FormInput>
 
       <FormInput>
         <label>DOCTOR NAME</label>
-        <Input placeholder='Enter Doctor Name Here' name='doctorName'>
+        <Input onChange={Handler.FormHandler} value={Handler.form.name} placeholder='Enter Doctor Name Here' name='name'>
         </Input>
       </FormInput>
 
@@ -49,7 +49,7 @@ const FormLeft = () => {
           
       <FormInput>
         <label>DOCTOR METAMASK WALLET ID</label>
-        <Input placeholder='Enter Wallet id here' name='doctorWallet'>
+        <Input onChange={Handler.FormHandler} value={Handler.form.walletid} placeholder='Enter Wallet id here' name='walletid'>
         </Input>
       </FormInput>
 
