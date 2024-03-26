@@ -10,9 +10,9 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
     <Main>
         <SubMain>
             <Division>
-              <Head>The Contract Crew</Head>
+              <Head>MediLedger</Head>
               <Text>
-                The First Decentralised Application for infrastructure development
+                Decentralised Application for Medical Record and Account Management
               </Text>
             </Division>
             <Division>
@@ -31,7 +31,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
             </Division>
             <Division>
                 <Head>Contact Us</Head>
-                <Text>contractcrew@gov.in</Text>
+                <Text>medi@nitp.ac.in</Text>
                 <Text>+7687 8786</Text>
             </Division>
         </SubMain>

@@ -7,7 +7,7 @@ import styled from 'styled-components'
         <SubHeader>
         <Div>
           <Text>
-            @2023 TheContractCrew All Rights Reserved
+            @2024 MediLedger All Rights Reserved
           </Text>
         </Div>
         <Div>
