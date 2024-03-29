@@ -47,7 +47,7 @@ const FormLeft = () => {
           </Select>
       </FormInput>
 
-       <FormInput>
+      <FormInput>
         <label>Patient METAMASK WALLET ID</label>
         <Input onChange={Handler.FormHandler} value={Handler.form.walletid} placeholder='Enter Wallet id here' name='walletid'>
         </Input>

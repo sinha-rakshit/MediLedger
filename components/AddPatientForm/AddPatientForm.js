@@ -17,7 +17,7 @@ const AddPatientForm = () => {
      name:"",
      pid:"",
     walletid:""
-   });
+});
 
    const [loading , setLoading]= useState(false);
    const[address, setAddress]= useState("");
@@ -33,7 +33,7 @@ const AddPatientForm = () => {
    const registerPatient = async (e) => {
       e.preventDefault();
       try{
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = provider.getSigner();
 
       if(form.pid=== ""){

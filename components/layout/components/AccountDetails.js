@@ -4,16 +4,16 @@ import { useState } from 'react';
 
 
 const networks = {
-    polygon: {
-        chainId: `0x${Number(80001).toString(16)}`,
-        chainName: "Polygon Testnet",
+    sepolia: {
+        chainId: `0x${Number(11155111).toString(16)}`,
+        chainName: "Sepolia Testnet",
         nativeCurrency: {
-            name : "MATIC",
-            symbol: "MATIC",
+            name : "SepoliaETH",
+            symbol: "SepoliaETH",
             decimals: 18
         },
-        rpcUrls: ["https://rpc-mumbai.maticvigil.com/"],
-        blockExplorerUrls: ["https://mumbai.polygonscan.com/"]
+        rpcUrls: ["https://sepolia.infura.io/v3/"],
+        blockExplorerUrls: ["https://sepolia.etherscan.io/"]
     },
 };
 
@@ -23,13 +23,13 @@ const AccountDetails=()=>{
   
   const connectAccount = async() => {
     await window.ethereum.request({method:"eth_requestAccounts"});
-    const provider=new ethers.providers.Web3Provider(window.ethereum,"any");
-    if(provider.network!=="matic"){
+    const provider=new ethers.BrowserProvider(window.ethereum,"any");
+    if(provider.network!=="sepolia"){
       await window.ethereum.request({
         method:"wallet_addEthereumChain",
         params:[
           {
-            ...networks["polygon"]
+            ...networks["sepolia"]
           }
         ]
       })
@@ -37,13 +37,13 @@ const AccountDetails=()=>{
       const account=provider.getSigner();
       const Address=await account.getAddress();
       setAddress(Address);
-      const Balance=ethers.utils.formatEther(await account.getBalance());
+      const Balance=ethers.formatEther(await account.getBalance());
       setBalance(Balance);
     }
   }
     return (
     <ConnectAccWrap onClick={connectAccount} >
-       {balance==''?<AccBalance></AccBalance> : <AccBalance>{balance.slice(0,4)}MATIC</AccBalance>}
+       {balance==''?<AccBalance></AccBalance> : <AccBalance>{balance.slice(0,4)}ETH</AccBalance>}
       {address==''?<AccAddress >Connect Wallet</AccAddress>:<AccAddress>{address.slice(0,6)}...{address.slice(39)}</AccAddress>}
           
     

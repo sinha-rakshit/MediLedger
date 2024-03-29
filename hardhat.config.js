@@ -14,10 +14,10 @@ const rpcUrl=process.env.NEXT_PUBLIC_RPC_URL
 
 module.exports = {
   solidity: "0.8.10",
-  defaultNetwork: "polygon",
+  defaultNetwork: "sepolia",
   networks: {
      hardhat: {},
-     polygon: {
+     sepolia: {
       url:rpcUrl,
       accounts: [privateKey]
      }
