@@ -23,7 +23,7 @@ const AccountDetails=()=>{
   
   const connectAccount = async() => {
     await window.ethereum.request({method:"eth_requestAccounts"});
-    const provider=new ethers.BrowserProvider(window.ethereum,"any");
+    const provider=new ethers.providers.Web3Provider(window.ethereum,"any");
     if(provider.network!=="sepolia"){
       await window.ethereum.request({
         method:"wallet_addEthereumChain",
@@ -37,7 +37,7 @@ const AccountDetails=()=>{
       const account=provider.getSigner();
       const Address=await account.getAddress();
       setAddress(Address);
-      const Balance=ethers.formatEther(await account.getBalance());
+      const Balance=ethers.utils.formatEther(await account.getBalance());
       setBalance(Balance);
     }
   }
