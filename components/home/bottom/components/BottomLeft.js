@@ -8,16 +8,16 @@ const BottomLeft = () => {
   return (
     <BottomHomeLeftWrap>
         <Paragraph>Become a part of </Paragraph>
-        <Heading>THE CONTRACT CREW</Heading>
-        <Text><Paragraph>No possibility of data tampering</Paragraph></Text>
+        <Heading>MEDILEDGER</Heading>
+        <Text><Paragraph>A secure, transparent, and efficient platform for managing medical records and reimbursement processes.</Paragraph></Text>
         
         <Caption>
-            SAFER AND DIGITALLY SMARTER SOLUTION
+            A DIGITALLY SMARTER SOLUTION
             
         </Caption>
-        <Text><Paragraph>To visit all contracts click below </Paragraph></Text>
+        <Text><Paragraph>To visit patient details click below </Paragraph></Text>
         <ButtonWrap><Link  style={{textDecoration:'none'}} href="/" > <TNavLinks active={Router.pathname=="/"?true:false}>
-        All Contracts
+        All Patients
       </TNavLinks></Link></ButtonWrap>
        
         

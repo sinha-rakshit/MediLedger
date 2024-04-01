@@ -8,16 +8,17 @@ const MidLeft = () => {
   return (
     <MidHomeLeftWrap>
         
-        <Heading>WHY CONTRACT CREW?</Heading>
-        <Text><Paragraph>Reduces risk and cuts costs for all involved</Paragraph></Text>
+        <Heading>WHY MEDILEDGER?</Heading>
+        <Text><Paragraph> Facilitates Seamless Financial Transactions</Paragraph></Text>
         
         <Caption>
             NO PAPERWORK
-            NO MIDDLEMEN 
+            NO DELAYS 
         </Caption>
-        <Text><Paragraph> Just fill a form to get your deal approved. </Paragraph></Text>
-        <ButtonWrap><Link  style={{textDecoration:'none'}} href="/" > <TNavLinks active={Router.pathname=="/"?true:false}>
-        Propose Contract
+      <Text><Paragraph> Access your health records from anywhere. </Paragraph></Text>
+      <Text><Paragraph> Get Registered </Paragraph></Text>
+        <ButtonWrap><Link  style={{textDecoration:'none'}} href="/addPatient" > <TNavLinks active={Router.pathname=="/addPatient"?true:false}>
+        Register Patient
       </TNavLinks></Link></ButtonWrap>
         <Text><Paragraph>Scroll down  to see more </Paragraph></Text>
        
