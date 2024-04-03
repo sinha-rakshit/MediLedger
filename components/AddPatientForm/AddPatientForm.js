@@ -16,7 +16,12 @@ const AddPatientForm = () => {
    const [form, setForm] = useState({
      name:"",
      pid:"",
-    walletid:""
+     walletid: "",
+     gender: "",
+     allergies:"",
+     height: "",
+     weight:"",
+     bloodgrp: ""
 });
 
    const [loading , setLoading]= useState(false);
@@ -43,26 +48,48 @@ const AddPatientForm = () => {
         toast.warn("Pateint Name field is Empty")
       }else if(form.walletid === ""){
        toast.warn("Wallet id field is Empty");
-      }else{
-        setLoading(true);
-        console.log("im here");
+      }else if(form.gender === ""){
+       toast.warn("Wallet id field is Empty");
+      }else if(form.allergies === ""){
+       toast.warn("Wallet id field is Empty");
+      }else if(form.bloodgrp === ""){
+       toast.warn("Wallet id field is Empty");
+      }else if(form.height === ""){
+       toast.warn("Wallet id field is Empty");
+      }else if(form.weight === ""){
+       toast.warn("Wallet id field is Empty");
+      }{
+          setLoading(true);
+          
+          console.log("im here 1");
+
         const contract = new ethers.Contract(
           process.env.NEXT_PUBLIC_ADDRESS,
           Mediledger.abi,
           signer
-        );
-        console.log("im here 2");
+          );
+          
+          console.log("im here 2");
+      
         const contractData= await contract.addPatient(
           form.name,
           form.pid,
+          form.gender,
+          form.allergies,
+          form.bloodgrp,
+          form.height,
+          form.weight,
           form.walletid
         );
 
-        console.log("im here 3");
-        await contractData.wait();
-        console.log("im here 4");
-        setAddress(contractData.to);
-        console.log("im here 5");
+          console.log("im here 3");
+          
+          await contractData.wait();
+
+          console.log("im here 4");
+          
+          setAddress(contractData.to);
+          
       }
          
       } catch(error) {

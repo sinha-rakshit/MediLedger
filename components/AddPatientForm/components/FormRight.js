@@ -19,19 +19,19 @@ const FormRight = () => {
         <FormRow>
           <RowFirst>
             <label>ANY ALLERGIES</label>
-            <Input name="allergies" placeholder='Enter allergy information if any'></Input>
+            <Input onChange={Handler.FormHandler} value={Handler.form.allergies} name="allergies" placeholder='Enter allergy information if any'></Input>
           </RowFirst>
           <RowSecond>
             <label>PATEINT HEIGHT</label>
-            <Input  name="height" type={'number'}  ></Input>
+            <Input onChange={Handler.FormHandler} value={Handler.form.height}  name="height" type={'number'}  ></Input>
           </RowSecond>
           <RowSecond>
             <label>PATEINT WEIGHT</label>
-            <Input  name="weight" type={'number'}  ></Input>
+            <Input onChange={Handler.FormHandler} value={Handler.form.weight}  name="weight" type={'number'}  ></Input>
           </RowSecond>
           <RowSecond>
             <label>PATEINT BLOOD GROUP</label>
-            <Input  name="bloodGroup"></Input>
+            <Input onChange={Handler.FormHandler} value={Handler.form.bloodgrp} name="bloodgrp"></Input>
           </RowSecond>
         </FormRow>
       </FormInput>

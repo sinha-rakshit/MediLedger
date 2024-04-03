@@ -7,7 +7,7 @@ import Link from 'next/link';
   const Router=useRouter();
   return (
       <HNavWrap>
-      <Link style={{textDecoration:'none', color:'black'}} href={'/'}><HNavLinks active={Router.pathname=="/"?"true":"false"}>
+      <Link style={{textDecoration:'none', color:'black'}} href={'/allPatients'}><HNavLinks active={Router.pathname=="/"?"true":"false"}>
         All Patients
       </HNavLinks> </Link>
       <Link style={{textDecoration:'none', color:'black'}} href={'/addDoctor'}><HNavLinks active={Router.pathname=="/addDoctor"?"true":"false"}>

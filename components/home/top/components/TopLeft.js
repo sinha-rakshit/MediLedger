@@ -8,7 +8,7 @@ const TopLeft = () => {
   return (
     <TopLeftWrap>
         <Paragraph>We Bring Forward</Paragraph>
-        <Heading>MEDI LEDGER</Heading>
+        <Heading>MEDILEDGER</Heading>
         <Text><Paragraph>A blockchain-based medical management decentralised application for NIT PATNA</Paragraph> 
         <Paragraph>built primarily to provide transparancy in reimbuirsements and medical records</Paragraph></Text>
         

@@ -4,16 +4,16 @@ import { useState } from 'react';
 
 
 const networks = {
-    sepolia: {
-        chainId: `0x${Number(11155111).toString(16)}`,
-        chainName: "Sepolia Testnet",
+    polygon: {
+        chainId: `0x${Number(80001).toString(16)}`,
+        chainName: "Polygon Testnet",
         nativeCurrency: {
-            name : "SepoliaETH",
-            symbol: "SepoliaETH",
+            name : "MATIC",
+            symbol: "MATIC",
             decimals: 18
         },
-        rpcUrls: ["https://sepolia.infura.io/v3/"],
-        blockExplorerUrls: ["https://sepolia.etherscan.io/"]
+        rpcUrls: ["https://rpc-mumbai.maticvigil.com/"],
+        blockExplorerUrls: ["https://mumbai.polygonscan.com/"]
     },
 };
 
@@ -24,12 +24,12 @@ const AccountDetails=()=>{
   const connectAccount = async() => {
     await window.ethereum.request({method:"eth_requestAccounts"});
     const provider=new ethers.providers.Web3Provider(window.ethereum,"any");
-    if(provider.network!=="sepolia"){
+    if(provider.network!=="matic"){
       await window.ethereum.request({
         method:"wallet_addEthereumChain",
         params:[
           {
-            ...networks["sepolia"]
+            ...networks["polygon"]
           }
         ]
       })
@@ -43,7 +43,7 @@ const AccountDetails=()=>{
   }
     return (
     <ConnectAccWrap onClick={connectAccount} >
-       {balance==''?<AccBalance></AccBalance> : <AccBalance>{balance.slice(0,4)}ETH</AccBalance>}
+       {balance==''?<AccBalance></AccBalance> : <AccBalance>{balance.slice(0,4)}SepoliaETH</AccBalance>}
       {address==''?<AccAddress >Connect Wallet</AccAddress>:<AccAddress>{address.slice(0,6)}...{address.slice(39)}</AccAddress>}
           
     

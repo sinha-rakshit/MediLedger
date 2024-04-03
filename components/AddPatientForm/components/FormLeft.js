@@ -40,7 +40,7 @@ const FormLeft = () => {
 
       <FormInput>
         <label>PATIENT GENDER </label>
-            <Select name="patientGender">
+            <Select onChange={Handler.FormHandler} value={Handler.form.gender} name="gender">
               <option>Female</option>
               <option>Male</option>
               <option>Other</option>

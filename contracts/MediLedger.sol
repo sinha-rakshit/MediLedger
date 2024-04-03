@@ -11,69 +11,130 @@ contract allDoctors {
 
 contract MediLedger is allDoctors {
     event allPatient(
-        string indexed fid,
-        string name,
+        string indexed pid,
+        address indexed walletid,
         address contractAddress,
-        address paddress
+        string name,
+        string gender,
+        string allergies,
+        uint height,
+        uint weight,
+        string bloodgrp
     );
+
     event allDoctor(
         string indexed did,
         string name,
         address contractAddress,
         address daddress
     );
+
     address public admin;
     address public accounts;
-
+    address[] public deployedPatients;
+    address public wid;
     constructor() {
         admin = msg.sender;
-        accounts = 0xdD870fA1b7C4700F2BD7f44238821C26f7392148;
+        accounts = 0x7814c6fd323a2EB88D257289682E3c2c8E945C82;
     }
 
     function addPatient(
         string memory _name,
         string memory _fid,
-        string memory walletid
+        string memory _gender,
+        string memory _allergies,
+        string memory _bloodgrp,
+        uint _height,
+        uint _weight,
+        address payable _walletid
     ) public {
-        //require(msg.sender == admin, "youre not admin");
-        address wid = address(bytes20(bytes(walletid)));
-        Patient p = new Patient(_name, _fid, accounts, admin, payable(wid));
-        emit allPatient(_fid, _name, address(p), wid);
+        require(msg.sender == admin);
+        Patient p = new Patient(
+            _name,
+            _fid,
+            _gender,
+            _allergies,
+            _height,
+            _weight,
+            _bloodgrp,
+            accounts,
+            admin,
+            payable(_walletid)
+        );
+
+        deployedPatients.push(address(p));
+
+        emit allPatient(
+            _fid,
+            _walletid,
+            address(p),
+            _name,
+            _gender,
+            _allergies,
+            _height,
+            _weight,
+            _bloodgrp
+        );
+    }
+
+    function getDeployedPatients() public view returns (address[] memory) {
+        return deployedPatients;
     }
 
     function addDoctor(
         string memory name,
         string memory did,
-        string memory walletid
+        address walletid
     ) public {
         require(msg.sender == admin);
-        address wid = address(bytes20(bytes(walletid)));
-        Doctor d = new Doctor(name, did, wid);
-        allDoctorsWallets.push(wid);
-        emit allDoctor(did, name, address(d), wid);
+        Doctor d = new Doctor(name, did, walletid);
+        allDoctorsWallets.push(walletid);
+        emit allDoctor(did, name, address(d), walletid);
     }
 }
 
 contract Patient is allDoctors {
     event allBills(uint timestamp, string hash);
     event refunds(uint timestamp, uint amount);
+
     string public name;
     string public pid;
+    string public email;
+    string public dob;
+    uint public contact;
+    string public gender;
+    string public allergies;
+    uint public height;
+    uint public weight;
+    string public bloodgrp;
+    string public maritalStatus;
+
     address public admin;
     string[] public pendingBills;
     string[] public passedBills;
     address public accounts;
     uint public pendingRefund;
     address payable public walletid;
+
     constructor(
         string memory _name,
         string memory _fid,
+        string memory _gender,
+        string memory _allergies,
+        uint _height,
+        uint _weight,
+        string memory _bloodgrp,
         address _accounts,
         address _admin,
         address payable _walletid
     ) {
         name = _name;
         pid = _fid;
+        gender = _gender;
+        allergies = _allergies;
+        height = _height;
+        weight = _weight;
+        bloodgrp = _bloodgrp;
         accounts = _accounts;
         admin = _admin;
         walletid = _walletid;

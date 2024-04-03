@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
  const HLeft = () => {
   return (
-    <HLeftWrap>Medi Ledger</HLeftWrap>
+    <HLeftWrap>MediLedger</HLeftWrap>
   )
 }
  const HLeftWrap=styled.h1`
