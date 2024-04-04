@@ -56,10 +56,10 @@ import {useRouter} from 'next/router';
                 <Text>Patient Name<PaidIcon /></Text> 
                 <Text>{e.name}</Text>
                   </CardData>
-              {/* <CardData>
+              <CardData>
                 <Text><EngineeringOutlinedIcon />Patient Wallet Address</Text> 
-                <Text>{e.pWalletid.slice(0,12)}...{e.pWalletid.slice(32)}</Text>
-              </CardData> */}
+                <Text>{e.walletid.slice(0,12)}...{e.walletid.slice(32)}</Text>
+              </CardData>
               <CardData><TNavLinks><Link passHref href={'/' + e.contractAddress}><Button>
                Contract Details
               </Button></Link></TNavLinks></CardData>
@@ -88,7 +88,8 @@ export async function getStaticProps() {
       return {
         pid:parseInt(e.args.fid),
         contractAddress:e.args.contractAddress,
-        name:e.args.name
+        name: e.args.name,
+        walletid:e.args.walletid
       }
     });
     // const getBridgeContracts = contract.filters.contractsCreated('Bridge');

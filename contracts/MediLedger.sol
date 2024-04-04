@@ -99,15 +99,11 @@ contract Patient is allDoctors {
 
     string public name;
     string public pid;
-    string public email;
-    string public dob;
-    uint public contact;
     string public gender;
     string public allergies;
     uint public height;
     uint public weight;
     string public bloodgrp;
-    string public maritalStatus;
 
     address public admin;
     string[] public pendingBills;
