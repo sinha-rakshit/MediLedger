@@ -7,11 +7,10 @@ To get started with our Application, follow these steps:
 
 ### 1. Clone the Repository
 
-```bash
 git clone <repository_url>
-cd <repository_name>
+cd <repository_name> 
 
-2. Install Dependencies
+### 2. Install Dependencies
 
 npm install
 # or
@@ -19,23 +18,23 @@ yarn install
 # or
 pnpm install
 
-3. Configure Ethereum Wallet and Sepolia Network
+### 3. Configure Ethereum Wallet and Sepolia Network
 
-  •	Install and set up Metamask.
+ 	•	Install and set up Metamask.
 	•	Configure your Ethereum wallet and Sepolia network settings.
 	
-4. Update Solidity File
+### 4. Update Solidity File
 
 	•	Add your account_section addresses from Metamask wallet in the constructor of our solidity file.
 
-5. Add Environment Variables
+### 5. Add Environment Variables
 
 	•	Create a .env.local file with your RPC URL and Metamask private key.
 
 NEXT_PUBLIC_RPC_URL=<your_infura_rpc_url>
 NEXT_PUBLIC_PRIVATE_KEY=<your_metamask_private_key>
 
-6. Compile and Deploy Contract
+### 6. Compile and Deploy Contract
 
 Compile and deploy the contract using Hardhat, and note the deployed address from terminal and add it to .env.local file.
 
@@ -43,15 +42,15 @@ npx hardhat compile
 # or
 npx hardhat scripts/deploy.js
 
-7. Run the Development Server
+### 7. Run the Development Server
 
 npm run dev
 
-8. View the Application
+### 8. View the Application
 
 Open http://localhost:3000 with your browser to see the result.
 
-9. Usage Instructions
+### 9. Usage Instructions
 
 	1.	First, add a patient using the given links in the navigation bar of the home page.
 	2.	Then, checkout that patient through the “allPatients” link in the navigation bar of the home page.
