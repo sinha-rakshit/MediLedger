@@ -7,8 +7,7 @@ To get started with our Application, follow these steps:
 
 ### 1. Clone the Repository
 
-git clone <repository_url>
-cd <repository_name> 
+git clone https://github.com/tulsi-kumari/MediLedger.git
 
 ### 2. Install Dependencies
 
