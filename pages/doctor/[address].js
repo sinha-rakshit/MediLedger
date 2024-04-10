@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import {TailSpin} from 'react-loader-spinner'
 import {create as IPFSHTTPClient} from 'ipfs-http-client';
 import lighthouse from '@lighthouse-web3/sdk'
+import axios from 'axios';
 
 const ipfs = IPFSHTTPClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https' });
 
@@ -17,65 +18,48 @@ const ipfs = IPFSHTTPClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'h
 
     const [uploadLoading, setUploadLoading] = useState(false);
     const [uploaded, setUploaded] = useState(false);
-    const [buffer, setBuffer] = useState(null);
+
     const [fileUrl, setFileUrl] = useState();
 
    const [file, setFile] = useState(null);
    const [amt, setAmt] = useState(0);
 
-   function getHash() {
-        ipfs.files.add(Buffer.from(buffer), (error, result) => {
-            if (error) {
-                console.error(error)
-                return
-            }
-            setFileUrl(result[0].hash);
-    });
-   }
-   
-   
-   
    const FileHandler = (e) => {
-        e.preventDefault();
-         setFile(URL.createObjectURL(event.target.files[0]));
-        
-         const reader = new FileReader();
-         reader.readAsArrayBuffer(event.target.files[0])
-         reader.addEventListener("load", () => {
-                    setBuffer(reader.result)
-         })
+       setFile(e.target.files[0]);
    }
    
    const AmtHandler = (e) => {
         setAmt(e);
     }
     
-   const uploadFiles = async (e) => {
-     
-    e.preventDefault();
-    setUploadLoading(true);
-    const formData = new FormData();
-     formData.append('file', file);
-     
-      if(file !== null) {
-        try {
-          console.log(file);
-          getHash();
-          console.log(fileUrl)
-          toast.success("Files Uploaded Sucessfully")
-          setUploadLoading(false);
-          setUploaded(true);
-          } catch (error) {
-            console.log(error)
-            toast.warn(`Error Uploading File`);
+   const uploadFiles = async (file) => {
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+    
+        const pinata_api_key = "e8967700c5e036c36818";
+        const pinata_secret_api_key = "f2f99bec8801c24bb2b2f9232de94fa961bcb7695bbbbb9e0d45689113fd27cf";
+    
+        const resFile = await axios({
+          method: "post",
+          url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
+          data: formData,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': Bearer `${pinata_api_key}:${pinata_secret_api_key}`
           }
-      }
+        });
+    
+        const ImageHash = `ipfs://${resFile.data.IpfsHash}`;
+        return ImageHash;
+      } catch (error) {
+        console.log(error);
+        toast.warn("Error Uploading File");
 
-      
-      
-   }
+      }
+    }
    
-   const addBill = async () => {
+   const addBill = async (e) => {
      
      e.preventDefault();
 
@@ -103,6 +87,8 @@ const ipfs = IPFSHTTPClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'h
           await addData.wait();
      }
    }
+
+
 
   return (
     <DetailWrapper>
