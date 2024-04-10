@@ -11,7 +11,7 @@ contract allDoctors {
 
 contract MediLedger is allDoctors {
     event allPatient(
-        string indexed pid,
+        uint indexed pid,
         address indexed walletid,
         address contractAddress,
         string name,
@@ -23,7 +23,7 @@ contract MediLedger is allDoctors {
     );
 
     event allDoctor(
-        string indexed did,
+        uint indexed did,
         string name,
         address contractAddress,
         address daddress
@@ -40,7 +40,7 @@ contract MediLedger is allDoctors {
 
     function addPatient(
         string memory _name,
-        string memory _fid,
+        uint _fid,
         string memory _gender,
         string memory _allergies,
         string memory _bloodgrp,
@@ -81,11 +81,7 @@ contract MediLedger is allDoctors {
         return deployedPatients;
     }
 
-    function addDoctor(
-        string memory name,
-        string memory did,
-        address walletid
-    ) public {
+    function addDoctor(string memory name, uint did, address walletid) public {
         require(msg.sender == admin);
         Doctor d = new Doctor(name, did, walletid);
         allDoctorsWallets.push(walletid);
@@ -98,7 +94,7 @@ contract Patient is allDoctors {
     event refunds(uint timestamp, uint amount);
 
     string public name;
-    string public pid;
+    uint public pid;
     string public gender;
     string public allergies;
     uint public height;
@@ -114,7 +110,7 @@ contract Patient is allDoctors {
 
     constructor(
         string memory _name,
-        string memory _fid,
+        uint _fid,
         string memory _gender,
         string memory _allergies,
         uint _height,
@@ -176,9 +172,9 @@ contract Patient is allDoctors {
 
 contract Doctor {
     string public name;
-    string public did;
+    uint did;
     address public walletid;
-    constructor(string memory _name, string memory _did, address _walletid) {
+    constructor(string memory _name, uint _did, address _walletid) {
         name = _name;
         did = _did;
         walletid = _walletid;

@@ -42,27 +42,35 @@ import {useRouter} from 'next/router';
             {filter.map((e)=>{
               return(
                  <Card >
-                  <CardData> <Image src="https://img.freepik.com/free-vector/data-network-businessman_24908-57817.jpg?t=st=1681567642~exp=1681568242~hmac=ab836baab71c248c8f6155ecc4c999d9de72dc688e3a1baddc432643c5793ccf" width="280" height="225"/>
+                  <CardData>
+                    <Image src="https://img.freepik.com/free-vector/data-network-businessman_24908-57817.jpg?t=st=1681567642~exp=1681568242~hmac=ab836baab71c248c8f6155ecc4c999d9de72dc688e3a1baddc432643c5793ccf" width="280" height="225" />
                   </CardData>
                   <CardData>
-                <Text>Patient Id</Text> 
-                <Text>{e.pid}</Text>
-              </CardData>
-              <CardData>
-                <Text><EngineeringOutlinedIcon />Patient Block Address</Text> 
-                <Text>{e.contractAddress.slice(0,12)}...{e.contractAddress.slice(32)}</Text>
-              </CardData>
-              <CardData>
-                <Text>Patient Name<PaidIcon /></Text> 
-                <Text>{e.name}</Text>
+                    <Text>Patient Name : {e.name}</Text> 
                   </CardData>
+             
               <CardData>
-                <Text><EngineeringOutlinedIcon />Patient Wallet Address</Text> 
-                <Text>{e.walletid.slice(0,12)}...{e.walletid.slice(32)}</Text>
+                    <TNavLinks>
+                      <Link passHref href={'/detail/' + e.contractAddress}>
+                        <Button>Patient Details</Button>
+                      </Link>
+                    </TNavLinks>
               </CardData>
-              <CardData><TNavLinks><Link passHref href={'/' + e.contractAddress}><Button>
-               Contract Details
-              </Button></Link></TNavLinks></CardData>
+              <CardData>
+                    <TNavLinks>
+                      <Link passHref href={'/doctor/' + e.contractAddress}>
+                        <Button>Upload Reports and Bills</Button>
+                      </Link>
+                    </TNavLinks>
+              </CardData>
+              <CardData>
+                    <TNavLinks>
+                      <Link passHref href={'/accounts/' + e.contractAddress}>
+                        <Button>Reimburse</Button>
+                      </Link>
+                    </TNavLinks>
+              </CardData>
+                  
           </Card>     
               )
             })}
@@ -86,54 +94,11 @@ export async function getStaticProps() {
     const AllPatients = await contract.queryFilter(getAllPatients);
     const AllData = AllPatients.map((e) => {
       return {
-        pid:parseInt(e.args.fid),
         contractAddress:e.args.contractAddress,
         name: e.args.name,
         walletid:e.args.walletid
       }
     });
-    // const getBridgeContracts = contract.filters.contractsCreated('Bridge');
-    // const BridgeContracts = await contract.queryFilter(getBridgeContracts);
-    // const BridgeData = BridgeContracts.map((e) => {
-    //   return {
-    //     pid:parseInt(e.args.projectId),
-    //     contractAddress:e.args.contractAddress,
-    //     amt:ethers.utils.formatEther(e.args.amount),
-    //     deadline:parseInt(e.args.deadline)
-    //   }
-    // });
-    // const getHighwayContracts = contract.filters.contractsCreated('Highway');
-    // const HighwayContracts = await contract.queryFilter(getHighwayContracts);
-    // const HighwayData = HighwayContracts.map((e) => {
-    //   return {
-    //     pid:parseInt(e.args.projectId),
-    //     contractAddress:e.args.contractAddress,
-    //     amt:ethers.utils.formatEther(e.args.amount),
-    //     deadline:parseInt(e.args.deadline)
-    //   }
-    // });
-    // const getDamContracts = contract.filters.contractsCreated('Dam');
-    // const DamContracts = await contract.queryFilter(getDamContracts);
-    // const DamData = DamContracts.map((e) => {
-    //   return {
-    //     pid:parseInt(e.args.projectId),
-    //     contractAddress:e.args.contractAddress,
-    //     amt:ethers.utils.formatEther(e.args.amount),
-    //     deadline:parseInt(e.args.deadline)
-    //   }
-    // });
-  
-    // const getOtherContracts = contract.filters.contractsCreated('Others');
-    // const OtherContracts = await contract.queryFilter(getOtherContracts);
-    // const OtherData = OtherContracts.map((e) => {
-    //   return {
-    //     pid:parseInt(e.args.projectId),
-    //     contractAddress:e.args.contractAddress,
-    //     amt:ethers.utils.formatEther(e.args.amount),
-    //     deadline:parseInt(e.args.deadline)
-    //   }
-    // });
-     
        return{
         props:{
           AllData

@@ -1,187 +1,77 @@
 import styled from "styled-components";
 import {ethers} from 'ethers';
-import MediLedger from '../artifacts/contracts/MediLedger.sol/MediLedger.json'
-import Patient from '../artifacts/contracts/MediLedger.sol/Patient.json'
+import MediLedger from '../../artifacts/contracts/MediLedger.sol/MediLedger.json'
+import Patient from '../../artifacts/contracts/MediLedger.sol/Patient.json'
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import Link from 'next/link'
 import { useRouter } from 'next/router';
-import {TailSpin} from 'react-loader-spinner'
-import {create as IPFSHTTPClient} from 'ipfs-http-client';
 
-
-// const projectId = process.env.NEXT_PUBLIC_IPFS_ID
-// const projectSecret = process.env.NEXT_PUBLIC_IPFS_KEY
-// const auth = 'Basic ' + Buffer.from(projectId + ":" + projectSecret).toString('base64')
-
-const client = IPFSHTTPClient("https://ipfs.infura.io:5001/api/v0");
-
- export default function Detail({Data}) {
-     const Router = useRouter();     
-
-    const [uploadLoading, setUploadLoading] = useState(false);
-    const [uploaded, setUploaded] = useState(false);
-
-    const [fileUrl, setFileUrl] = useState();
-
-   const [file, setFile] = useState(null);
+export default function Accounts({ Data }) {
+   
+   const Router = useRouter();     
    const [amt, setAmt] = useState(0);
+   const [change,setChange]=useState(false)
 
-    const FileHandler = (e) => {
-        setFile(e.target.files[0]);
-   }
-   
-   const AmtHandler = (e) => {
-        setAmt(e);
+   useEffect(() => {
+    const Request = async () => {
+
+      const provider = new ethers.providers.JsonRpcProvider(
+        process.env.NEXT_PUBLIC_RPC_URL
+      );
+    
+      const patient = new ethers.Patient(
+        Data.address,
+        Patient.abi,
+        provider
+      );
+
+      const penamt=await patient.getPendingRefund();
+
+      await penamt.wait();
+      setAmt(penamt);
     }
+
+    Request();
+  }, [change])
     
-   const uploadFiles = async (e) => {
-    e.preventDefault();
-    setUploadLoading(true);
-
-      if(file !== null) {
-          try {
-              const added = await client.add(file);
-              setFileUrl(added.path)
-          } catch (error) {
-            toast.warn(`Error Uploading File`);
-          }
-      }
-
-      setUploadLoading(false);
-      setUploaded(true);
-      toast.success("Files Uploaded Sucessfully")
-   }
    
-   const addBill = async () => {
-     
-     e.preventDefault();
+   const reimburse = async () => {
+      try{
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
 
-     const provider = new ethers.providers.Web3Provider(window.ethereum);
-     const signer = provider.getSigner();
+      const patient = new ethers.Patient(
+          Data.address,
+          Patient.abi,
+          signer
+        );
 
-     if(uploaded == false) {
-            toast.warn("Files Upload Required")
-     }else {
-       setLoading(true);  
-    
-          const patient = new ethers.Patient(
-            process.env.NEXT_PUBLIC_ADDRESS,
-            Patient.abi,
-            signer
-          );
-            
-          const billamt = ethers.utils.parseEther(amt);
-    
-          const addData = await patient.addBill(
-            fileUrl,
-            billamt
-          );
-    
-          await addData.wait();
-     }
+      const passed=await patient.passBill();
+
+      await passed.wait();
+
+      setChange(true);
+      }catch{
+        console.log("error , only doctor can reimburse");
+      }
    }
 
   return (
     <DetailWrapper>
-      <BottomContainer>
-        <TopLeftWrap>
-        <Paragraph>Check Your  </Paragraph>
-        <Heading>Medical History And Reimbursement Status</Heading>
+      <TopLeftWrap>
+        <Paragraph>Here we have our</Paragraph>
+        <Heading>Account Section Portal</Heading>
+        <Text><Paragraph>Where Account Section Clear Pending Reimbursement Instantly</Paragraph> 
+        <Paragraph>Maximizing Efficiency , Minimizing Paperwork</Paragraph></Text>
+        <Text><Paragraph>Pending to Paid in Just One Click , Zero Hassle</Paragraph> </Text>
         <Caption>
-            YOUR UPDATES JUST A CLICK AWAY
-          </Caption>
-        
-          <Text><Paragraph> BEST OF LUCK!! </Paragraph></Text>
-      
-          
-        
-        <Text><Paragraph>Scroll down  to see  more ...</Paragraph></Text>
-       
-        
-    </TopLeftWrap> 
-    
-        </BottomContainer>
-        <TopLeftWrap>
-        <Paragraph>Your deals will be thoroughly analysed and reviewed here by</Paragraph>
-        <Heading>OUR BEST DOCTORS</Heading>
-        <Text><Paragraph>Using Voting Algorithm </Paragraph> 
-        <Paragraph>to maintain your trust in us</Paragraph></Text>
-        <Text><Paragraph>Any suspicious activity will be easily detected </Paragraph> </Text>
-        <Caption>
-            CONSENSUS IS THE RIGHT CONSCIENCE
+            Streamlined Finance , Instant Refunds
         </Caption>
-        <Text><Paragraph> Bid your best deals to get the majority approval </Paragraph></Text>
-        <ButtonWrap><TNavLinks>Analyse this contract</TNavLinks></ButtonWrap>
-        <Text><Paragraph>Disclaimer:Only for government authorized engineers </Paragraph></Text>
-       
-        
-    </TopLeftWrap>    
+        <Text><Paragraph> Where Blockchain Meets Billing Management </Paragraph></Text>
+        <ButtonWrap><TNavLinks>Transparent and Secure Records,Seamless Reimbursements</TNavLinks></ButtonWrap>
+        <Text><Paragraph> Financial Management Made Easy </Paragraph></Text>
+      </TopLeftWrap>    
 
 
-
-        <LeftContainer>
-            <FundsData>
-                <Funds>
-                    <FundTextTitle>Pateint Id</FundTextTitle>
-                    <FundTextContent>{Data.pid}</FundTextContent>
-                </Funds>
-                <Funds>
-                    <FundTextTitle>Patient Name</FundTextTitle>
-                    <FundTextContent>{Data.name}</FundTextContent>
-                </Funds>
-              </FundsData>
-              <FundsData>
-                <Funds>
-                    <FundTextTitle>Patient Gender</FundTextTitle>
-                    <FundTextContent>{Data.gender}</FundTextContent>
-                </Funds>
-                <Funds>
-                    <FundTextTitle>Patient Blood Group</FundTextTitle>
-                    <FundTextContent>{Data.bloodgrp}</FundTextContent>
-                </Funds>
-              </FundsData>
-              <FundsData>
-                <Funds>
-                    <FundTextTitle>Patient height (in cm)</FundTextTitle>
-                    <FundTextContent>{Data.height}</FundTextContent>
-                </Funds>
-                <Funds>
-                    <FundTextTitle>Patient weight</FundTextTitle>
-                    <FundTextContent>{Data.weight}</FundTextContent>
-                </Funds>
-            </FundsData>
-            <FundsData>
-                <Funds>
-                    <FundTextTitle>Wallet Address</FundTextTitle>
-                    <FundTextContent>{Data.walletid.slice(0,6)}...{Data.walletid.slice(39)}</FundTextContent>
-                </Funds>
-                <Funds>
-                    <FundTextTitle>Allergies</FundTextTitle>
-                    <FundTextContent>{Data.allergies}</FundTextContent>
-                </Funds>
-            </FundsData>
-            {/* <DonateSection>
-                <Textarea  placeholder="Enter Contract Review"/>
-              <Donate onClick={SetApproval}><ButtonWrap><TNavLinks>Approve</TNavLinks></ButtonWrap></Donate> 
-            </DonateSection> */}
-           
-        </LeftContainer>
-        <TopLeftWrap>
-        <Paragraph>Documents will be uploaded here by</Paragraph>
-        <Heading>THE DOCTOR</Heading>
-        <Text><Paragraph>This a decentralised system with no single authority</Paragraph> 
-        <Paragraph>Your prescriptions , reports and bills all at one place</Paragraph></Text>
-        
-        <Caption>
-            DECENTRALIZATION !! THE FUTURE IS HERE !!
-        </Caption>
-        <Text><Paragraph></Paragraph></Text>
-        <ButtonWrap>Add Documents</ButtonWrap>
-        <Text><Paragraph>Disclaimer:Accessible only by registered Doctors</Paragraph></Text>
-       
-        
-    </TopLeftWrap>  
         <RightContainer>
            <FundsData>
                 <Funds>
@@ -203,25 +93,16 @@ const client = IPFSHTTPClient("https://ipfs.infura.io:5001/api/v0");
                   <FundTextContent>{Data.walletid.slice(0,6)}...{Data.walletid.slice(39)}</FundTextContent> 
               </Funds>  
             </FundsData> 
-            
         <DonateSection>
-            <FormInput>
-              <label>Enter Amount</label>
-              <input onChange={AmtHandler} type={number} placeholder="Enter bill amount"></input>
-            </FormInput>
-            <FormInput>
-              <label>Select Documents</label>
-              <Input onChange={FileHandler} type={'file'} accept='*/*'/>
-            </FormInput>
-            {uploadLoading == true ? <Button><TailSpin color='#fff' height={20} /></Button> :uploaded == false ? 
-                <Button onClick={uploadFiles}>
-                    Upload Files to IPFS
-                </Button>
-                : <Button style={{cursor: "no-drop"}}>Files uploaded Sucessfully</Button>
-          }
-          <Button onClick={addBill}>
-              Add Documents
-          </Button>
+            <Funds>
+                <FundTextTitle>Pending Reimbursement</FundTextTitle>
+                <FundTextContent>{amt}</FundTextContent> 
+            </Funds>   
+          <Funds>
+              <Button onClick={reimburse}>
+                Reimburse
+            </Button>
+            </Funds>
          </DonateSection>
         </RightContainer>
         
@@ -456,7 +337,7 @@ margin-bottom: 10px;
   text-align: center;
   width: max-content;
   background-color: ${(props) => props.theme.btnDetail};
-  color: 'white';
+   color:${(props) => props.theme.colorDiv} ;
   border: none;
   cursor: pointer;
   font-family: 'Roboto';
@@ -467,8 +348,7 @@ margin-bottom: 10px;
     transition: transform 0.5s;
   }
   font-size: 14px;
-  font-weight: bold;
-  //transition: all 0.3s ease;
+  font-family: 'Comfortaa';
 `
 
 
@@ -498,3 +378,38 @@ const FormInput = styled.div`
   font-family:'poppins';
   margin-top:10px ;
 `
+const Input = styled.input`
+  padding:15px;
+  color:${(props) => props.theme.color} ;
+  margin-top:4px;
+  ::placeholder{
+    font-size: smaller;
+    color: lightslategrey;
+  }
+  border:1px solid ${(props) => props.theme.bgDiv};
+  outline:none;
+  font-size:large;
+  width:100% ;
+`
+
+const Button = styled.button`
+    
+    text-align: center;
+    width: 100%;
+    background-color: ${(props) => props.theme.btnColor};
+    border: none;
+    cursor: pointer;
+    font-family: 'Comfortaa';
+    text-transform: uppercase;
+    border-radius: 5px;
+    height: 3.5rem;
+    &:hover{
+      background-color: ${(props) => props.theme.colorSec} ;
+      color:${(props) => props.theme.color} ;
+      transform: translateY(-2px);
+      transition: transform 0.5s;
+    }
+    color:${(props) => props.theme.colorDiv} ;
+    font-size: 14px;
+    font-weight: bold;
+  `
