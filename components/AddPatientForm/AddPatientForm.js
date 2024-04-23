@@ -49,15 +49,15 @@ const AddPatientForm = () => {
       }else if(form.walletid === ""){
        toast.warn("Wallet id field is Empty");
       }else if(form.gender === ""){
-       toast.warn("Wallet id field is Empty");
+       toast.warn("Gender field is Empty");
       }else if(form.allergies === ""){
-       toast.warn("Wallet id field is Empty");
+       toast.warn("allergies field is Empty");
       }else if(form.bloodgrp === ""){
-       toast.warn("Wallet id field is Empty");
+       toast.warn("blood grp field is Empty");
       }else if(form.height === ""){
-       toast.warn("Wallet id field is Empty");
+       toast.warn("Height field is Empty");
       }else if(form.weight === ""){
-       toast.warn("Wallet id field is Empty");
+       toast.warn("Weight field is Empty");
       }{
           setLoading(true);
           

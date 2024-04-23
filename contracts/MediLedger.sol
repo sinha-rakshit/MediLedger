@@ -82,7 +82,7 @@ contract MediLedger is allDoctors {
     }
 
     function addDoctor(string memory name, uint did, address walletid) public {
-        require(msg.sender == admin);
+        require(msg.sender == admin, "You're not authorized");
         Doctor d = new Doctor(name, did, walletid);
         allDoctorsWallets.push(walletid);
         emit allDoctor(did, name, address(d), walletid);
@@ -133,7 +133,7 @@ contract Patient is allDoctors {
     }
 
     function passBill() public payable {
-        require(msg.sender == accounts);
+        require(msg.sender == accounts, "You're not authorized");
         walletid.transfer(pendingRefund);
         for (uint i = 0; i < pendingBills.length; i++) {
             passedBills.push(pendingBills[i]);
@@ -144,7 +144,7 @@ contract Patient is allDoctors {
     }
 
     function addBill(string memory _hash, uint amount) public {
-        require(isDoctor(msg.sender) == true);
+        require(isDoctor(msg.sender) == true, "You're not authorized");
         pendingBills.push(_hash);
         pendingRefund += amount;
         emit allBills(block.timestamp, _hash);

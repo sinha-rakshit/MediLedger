@@ -1,3 +1,4 @@
+
 import styled from "styled-components";
 import {ethers} from 'ethers';
 import MediLedger from '../../artifacts/contracts/MediLedger.sol/MediLedger.json'
@@ -16,76 +17,76 @@ const ipfs = IPFSHTTPClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'h
  export default function Detail({Data}) {
      const Router = useRouter();     
 
-    const [uploadLoading, setUploadLoading] = useState(false);
-    const [uploaded, setUploaded] = useState(false);
+   const [uploadLoading, setUploadLoading] = useState(false);
+   const [uploaded, setUploaded] = useState(false);
 
-    const [fileUrl, setFileUrl] = useState();
+    const [fileUrl, setFileUrl] = useState("https://gateway.lighthouse.storage/ipfs/QmRbpHfphjNSwd2Fubhz63cmN14vajyQXkc9JHtQstP5Pk");
 
    const [file, setFile] = useState(null);
-   const [amt, setAmt] = useState(0);
+   const [amt, setAmt] = useState("");
 
    const FileHandler = (e) => {
-       setFile(e.target.files[0]);
+       setFile(e.target.files);
    }
    
    const AmtHandler = (e) => {
-        setAmt(e);
+        setAmt(e.target.value);
     }
     
-   const uploadFiles = async (file) => {
+    const uploadFiles = async () => {
+      console.log("uploading+++++++++++++", file)
+      setUploadLoading(true);
       try {
-        const formData = new FormData();
-        formData.append("file", file);
-    
-        const pinata_api_key = "e8967700c5e036c36818";
-        const pinata_secret_api_key = "f2f99bec8801c24bb2b2f9232de94fa961bcb7695bbbbb9e0d45689113fd27cf";
-    
-        const resFile = await axios({
-          method: "post",
-          url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
-          data: formData,
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': Bearer `${pinata_api_key}:${pinata_secret_api_key}`
-          }
-        });
-    
-        const ImageHash = `ipfs://${resFile.data.IpfsHash}`;
-        return ImageHash;
+        const output = await lighthouse.upload(
+          file,
+          "8b7405be.5af63b0efc684dc2ad3b05a0f5443cbd",
+          false,
+          null,
+        );
+        console.log("File Status:", output);
+  
+        console.log(
+          "Visit at https://gateway.lighthouse.storage/ipfs/" + output.data.Hash
+        );
+        
+        const ImageHash = `https://gateway.lighthouse.storage/ipfs/${output.data.Hash}`;
+        setFileUrl(output.data.Hash);
+        console.log(fileUrl);
+        toast.success("File Uploaded to IPFS");
+        addBill();
       } catch (error) {
         console.log(error);
         toast.warn("Error Uploading File");
-
       }
-    }
+    };
    
-   const addBill = async (e) => {
-     
-     e.preventDefault();
-
+   const addBill = async () => {
      const provider = new ethers.providers.Web3Provider(window.ethereum);
      const signer = provider.getSigner();
-
-     if(uploaded == false) {
-            toast.warn("Files Upload Required")
-     }else {
-       setLoading(true);  
     
-          const patient = new ethers.Patient(
-            process.env.NEXT_PUBLIC_ADDRESS,
+     console.log("1-------")
+          const patient = new ethers.Contract(
+            Data.address,
             Patient.abi,
             signer
           );
-            
-          const billamt = ethers.utils.parseEther(amt);
-    
+     console.log("2-------")
+     console.log(amt);
+     const billamt = ethers.utils.parseEther(amt);
+     console.log(billamt)
+    console.log("3-------")
           const addData = await patient.addBill(
             fileUrl,
             billamt
           );
-    
-          await addData.wait();
-     }
+    console.log("4-------")
+     await addData.wait();
+     console.log("5-------")
+       setUploadLoading(false);
+       setUploaded(true);
+       
+       toast.success("Document Uploaded Sucessfully")
+     
    }
 
 
@@ -135,7 +136,7 @@ const ipfs = IPFSHTTPClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'h
           <Funds>
             <FormInput>
               <label>Enter Amount</label>
-              <Input onChange={AmtHandler} type={'number'} placeholder="Enter bill amount"/>
+              <Input onChange={AmtHandler} placeholder="Enter bill amount"/>
             </FormInput>
           </Funds>
           
@@ -154,9 +155,6 @@ const ipfs = IPFSHTTPClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'h
                 </Button></Funds>
                 : <Funds><Button style={{cursor: "no-drop"}}>Files uploaded Sucessfully</Button></Funds>
           }
-          <Funds><Button onClick={addBill}>
-              Add Documents
-          </Button></Funds>
          </DonateSection>
         </RightContainer>
         
@@ -465,5 +463,5 @@ const Button = styled.button`
     }
     color:${(props) => props.theme.colorDiv} ;
     font-size: 14px;
-    font-weight: bold;
-  `
+    font-weight: bold;
+ `
