@@ -9,25 +9,39 @@ export default function Accounts({ Data }) {
    
    const Router = useRouter();     
    const [amt, setAmt] = useState(0);
-   const [change,setChange]=useState(false)
+  const [change, setChange] = useState(false)
+  const [pendingBills, setPendingBills] = useState(null);
+  const [passedBills, setPassedBills] = useState(null);
+  
 
+  
    useEffect(() => {
     const Request = async () => {
-
-      const provider = new ethers.providers.JsonRpcProvider(
-        process.env.NEXT_PUBLIC_RPC_URL
-      );
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+     const signer = provider.getSigner();
     
-      const patient = new ethers.Patient(
+      const patient = new ethers.Contract(
         Data.address,
         Patient.abi,
-        provider
+        signer
       );
 
       const penamt=await patient.getPendingRefund();
 
       await penamt.wait();
       setAmt(penamt);
+
+      const data=await patient.getPendingBills();
+
+      await data.wait();
+      setPendingBills(data);
+
+      const nextdata=await patient.getPassedBills();
+
+      await nextdata.wait();
+      setPassedBills(nextdata);
+
+
     }
 
     Request();
@@ -104,7 +118,37 @@ export default function Accounts({ Data }) {
             </Button>
             </Funds>
          </DonateSection>
-        </RightContainer>
+      </RightContainer>
+      
+
+      <CardsWrapper >
+            {pendingBills.map((e)=>{
+              return(
+                <Card >
+                  
+                  <CardData>
+                    <Text>Record : {e}</Text> 
+                  </CardData>
+                  
+                </Card>     
+              )
+            })}
+            
+          </CardsWrapper>
+      <CardsWrapper >
+            {passedBills.map((e)=>{
+              return(
+                <Card >
+                  
+                  <CardData>
+                    <Text>Record : {e}</Text> 
+                  </CardData>
+                  
+                </Card>     
+              )
+            })}
+            
+          </CardsWrapper>
         
     </DetailWrapper>
   );
@@ -154,8 +198,8 @@ export async function getStaticProps(context){
      const weight=await patient.weight();
     const walletid = await patient.walletid();
     const allergies = await patient.allergies();
-     const gender=await patient.gender();
-     const pendingRefund=await patient.pendingRefund();
+  const gender = await patient.gender();
+  const pendingRefund = await patient.pendingRefund();
 
 
      const Data={

@@ -1,15 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0 <0.9.0;
 
-contract allDoctors {
-    address[] public allDoctorsWallets;
-
-    function addDoctorWallet(address wallet) external {
-        allDoctorsWallets.push(wallet);
-    }
-}
-
-contract MediLedger is allDoctors {
+contract MediLedger {
     event allPatient(
         uint indexed pid,
         address indexed walletid,
@@ -31,8 +23,7 @@ contract MediLedger is allDoctors {
 
     address public admin;
     address public accounts;
-    address[] public deployedPatients;
-    address public wid;
+
     constructor() {
         admin = msg.sender;
         accounts = 0x7814c6fd323a2EB88D257289682E3c2c8E945C82;
@@ -62,8 +53,6 @@ contract MediLedger is allDoctors {
             payable(_walletid)
         );
 
-        deployedPatients.push(address(p));
-
         emit allPatient(
             _fid,
             _walletid,
@@ -77,19 +66,14 @@ contract MediLedger is allDoctors {
         );
     }
 
-    function getDeployedPatients() public view returns (address[] memory) {
-        return deployedPatients;
-    }
-
     function addDoctor(string memory name, uint did, address walletid) public {
         require(msg.sender == admin, "You're not authorized");
         Doctor d = new Doctor(name, did, walletid);
-        allDoctorsWallets.push(walletid);
         emit allDoctor(did, name, address(d), walletid);
     }
 }
 
-contract Patient is allDoctors {
+contract Patient {
     event allBills(uint timestamp, string hash);
     event refunds(uint timestamp, uint amount);
 
@@ -104,6 +88,8 @@ contract Patient is allDoctors {
     address public admin;
     string[] public pendingBills;
     string[] public passedBills;
+    address[] public allDoctorsWallets;
+
     address public accounts;
     uint public pendingRefund;
     address payable public walletid;
@@ -130,6 +116,9 @@ contract Patient is allDoctors {
         accounts = _accounts;
         admin = _admin;
         walletid = _walletid;
+        allDoctorsWallets.push(0x0afD378421B04eb9dbF6DBD5Ac59f48CF43c3912);
+        allDoctorsWallets.push(0xc1497A7f53AaAB192D5ff344887749CF9dcE143c);
+        allDoctorsWallets.push(0x10237067D9a21Ddb0381bF2F0BDEefAb3020b29b);
     }
 
     function passBill() public payable {
@@ -143,7 +132,7 @@ contract Patient is allDoctors {
         pendingRefund = 0;
     }
 
-    function addBill(string memory _hash, uint amount) public {
+    function addBill(string memory _hash, uint amount) public payable {
         require(isDoctor(msg.sender) == true, "You're not authorized");
         pendingBills.push(_hash);
         pendingRefund += amount;
@@ -155,18 +144,6 @@ contract Patient is allDoctors {
             if (allDoctorsWallets[i] == docadd) return true;
         }
         return false;
-    }
-
-    function getPendingBills() public view returns (string[] memory) {
-        return pendingBills;
-    }
-
-    function getPassedBills() public view returns (string[] memory) {
-        return passedBills;
-    }
-
-    function getPendingRefund() public view returns (uint) {
-        return pendingRefund;
     }
 }
 

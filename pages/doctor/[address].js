@@ -10,9 +10,6 @@ import { useRouter } from 'next/router';
 import {TailSpin} from 'react-loader-spinner'
 import {create as IPFSHTTPClient} from 'ipfs-http-client';
 import lighthouse from '@lighthouse-web3/sdk'
-import axios from 'axios';
-
-const ipfs = IPFSHTTPClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https' });
 
  export default function Detail({Data}) {
      const Router = useRouter();     
@@ -20,7 +17,7 @@ const ipfs = IPFSHTTPClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'h
    const [uploadLoading, setUploadLoading] = useState(false);
    const [uploaded, setUploaded] = useState(false);
 
-    const [fileUrl, setFileUrl] = useState("https://gateway.lighthouse.storage/ipfs/QmRbpHfphjNSwd2Fubhz63cmN14vajyQXkc9JHtQstP5Pk");
+    const [fileUrl, setFileUrl] = useState("");
 
    const [file, setFile] = useState(null);
    const [amt, setAmt] = useState("");
@@ -72,9 +69,13 @@ const ipfs = IPFSHTTPClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'h
           );
      console.log("2-------")
      console.log(amt);
-     const billamt = ethers.utils.parseEther(amt);
-     console.log(billamt)
-    console.log("3-------")
+     const billamt = parseInt(amt);
+     console.log("3-------");
+     console.log(signer.getAddress());
+     const isdoc = await patient.isDoctor(signer.getAddress());
+     console.log(isdoc);
+     
+     console.log(fileUrl);
           const addData = await patient.addBill(
             fileUrl,
             billamt

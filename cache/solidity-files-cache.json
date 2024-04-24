@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "E:\\MinorProject1\\mediledger\\contracts\\MediLedger.sol": {
-      "lastModificationDate": 1713889143830,
-      "contentHash": "ebee18295ec2e3a8decb848483d51393",
+      "lastModificationDate": 1713958976599,
+      "contentHash": "409e02ec5a78e6e2941aec00edd8477d",
       "sourceName": "contracts/MediLedger.sol",
       "solcConfig": {
         "version": "0.8.10",
@@ -35,8 +35,7 @@
       "artifacts": [
         "Doctor",
         "MediLedger",
-        "Patient",
-        "allDoctors"
+        "Patient"
       ]
     }
   }
