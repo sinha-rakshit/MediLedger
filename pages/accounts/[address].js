@@ -4,21 +4,21 @@ import MediLedger from '../../artifacts/contracts/MediLedger.sol/MediLedger.json
 import Patient from '../../artifacts/contracts/MediLedger.sol/Patient.json'
 import { useEffect, useState } from "react";
 import { useRouter } from 'next/router';
+import Link from 'next/link';
+import { toast } from "react-toastify";
 
-export default function Accounts({ Data }) {
+
+export default function Accounts({ Data , MyBills , MyRefunds }) {
    
    const Router = useRouter();     
-   const [amt, setAmt] = useState(0);
-  const [change, setChange] = useState(false)
-  const [pendingBills, setPendingBills] = useState(null);
-  const [passedBills, setPassedBills] = useState(null);
-  
-
+  const [change, setChange] = useState(false);
+  const [filterBills, setFilterBills] = useState(MyBills);
+  const [filterRefunds, setFilterRefunds] = useState(MyRefunds);
   
    useEffect(() => {
     const Request = async () => {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
-     const signer = provider.getSigner();
+      const signer = provider.getSigner();
     
       const patient = new ethers.Contract(
         Data.address,
@@ -26,24 +26,17 @@ export default function Accounts({ Data }) {
         signer
       );
 
-      const penamt=await patient.getPendingRefund();
-
-      await penamt.wait();
-      setAmt(penamt);
-
-      const data=await patient.getPendingBills();
-
-      await data.wait();
-      setPendingBills(data);
-
-      const nextdata=await patient.getPassedBills();
-
-      await nextdata.wait();
-      setPassedBills(nextdata);
+      try {
+        console.log(MyBills);
+        console.log(MyRefunds);
+        
+      } catch (e)
+      {
+        console.log(e);
+      }
 
 
     }
-
     Request();
   }, [change])
     
@@ -52,20 +45,23 @@ export default function Accounts({ Data }) {
       try{
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-
-      const patient = new ethers.Patient(
+         console.log("0++++++++++++")
+      const patient = new ethers.Contract(
           Data.address,
           Patient.abi,
           signer
         );
-
-      const passed=await patient.passBill();
-
-      await passed.wait();
-
+        console.log("1++++++++++++")
+        console.log(Data.pendingRefund+ "+++++++++" + typeof(Data.pendingRefund));
+      const passed=await patient.passBill({value:ethers.utils.parseEther(Data.pendingRefund)});
+          console.log("2++++++++++++")
+        await passed.wait();
+        console.log("3++++++++++++")
+        toast.success("Reimburse,Please refresh !!!")
+      
       setChange(true);
-      }catch{
-        console.log("error , only doctor can reimburse");
+      }catch(e){
+        console.log(e);
       }
    }
 
@@ -110,7 +106,7 @@ export default function Accounts({ Data }) {
         <DonateSection>
             <Funds>
                 <FundTextTitle>Pending Reimbursement</FundTextTitle>
-                <FundTextContent>{amt}</FundTextContent> 
+                <FundTextContent>{ethers.utils.formatEther(Data.pendingRefund)}</FundTextContent> 
             </Funds>   
           <Funds>
               <Button onClick={reimburse}>
@@ -119,36 +115,34 @@ export default function Accounts({ Data }) {
             </Funds>
          </DonateSection>
       </RightContainer>
-      
+      <CardsWrapper>
+            <CardData>ALL BILLS</CardData>
+            {filterBills.map((e) => {
+              return (
+                
+                <Card key={e.timestamp}>
+                <CardData>{e.doctor.slice(0,6)}...{e.doctor.slice(39)}</CardData>
+                <CardData>{e.amount} ETH</CardData>
+                  <CardData>{new Date(e.timestamp * 1000).toLocaleString()}</CardData>
+                  <CardData><Link style={{textDecoration:'none'}} href={'https://gateway.lighthouse.storage/ipfs/' + e.hash}>Report and Bill</Link></CardData>
+              </Card>
+              )
+            })
+        }
+       </CardsWrapper> 
+       <CardsWrapper>
+            <CardData>MY REFUNDS</CardData>
+            {filterRefunds.map((e) => {
+              return (
+                <Card key={e.timestamp}>
+                <CardData>{e.amount} ETH</CardData>
+                <CardData>{new Date(e.timestamp * 1000).toLocaleString()}</CardData>
+              </Card>
+              )
+            })
+            }
+        </CardsWrapper>
 
-      <CardsWrapper >
-            {pendingBills.map((e)=>{
-              return(
-                <Card >
-                  
-                  <CardData>
-                    <Text>Record : {e}</Text> 
-                  </CardData>
-                  
-                </Card>     
-              )
-            })}
-            
-          </CardsWrapper>
-      <CardsWrapper >
-            {passedBills.map((e)=>{
-              return(
-                <Card >
-                  
-                  <CardData>
-                    <Text>Record : {e}</Text> 
-                  </CardData>
-                  
-                </Card>     
-              )
-            })}
-            
-          </CardsWrapper>
         
     </DetailWrapper>
   );
@@ -202,24 +196,49 @@ export async function getStaticProps(context){
   const pendingRefund = await patient.pendingRefund();
 
 
+        const AllBills = patient.filters.allBills();
+        const MyAllBills = await patient.queryFilter(AllBills);
+
+        const MyBills = MyAllBills.map((e) => {
+        return {
+          doctor: e.args.Doctor,
+          amount: ethers.utils.formatEther(e.args.amount),
+          timestamp: parseInt(e.args.timestamp),
+          hash: e.args.hash
+        }
+        });
+
+        const AllRefunds = patient.filters.refunds();
+        const MyAllRefunds = await patient.queryFilter(AllRefunds);
+
+        const MyRefunds=MyAllRefunds.map((e) => {
+        return {
+          amount: ethers.utils.formatEther(e.args.amount),
+          timestamp: parseInt(e.args.timestamp)
+        }
+        });
+  
+
      const Data={
         address:context.params.address,
         pid:parseInt(pid),
         name,
-        pendingRefund:ethers.utils.formatEther(pendingRefund),
+        pendingRefund:pendingRefund.toString(),
          gender,
          allergies,
         bloodgrp,
          height:parseInt(height),
          weight:parseInt(weight),
-        walletid
+       walletid
     }
 
 
 
     return {
         props:{
-            Data
+          Data,
+          MyBills,
+          MyRefunds
         },
     revalidate: 10
     }
@@ -346,6 +365,40 @@ padding-top: 10rem;
   align-items: center;
   justify-content: center;
 `
+const CardsWrapper = styled.div`
+    
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 80%;
+    margin-top: 25px;
+    border: none;
+  `
+  const Card = styled.div`
+    width: 25%;
+    margin-top: 20px;
+    /* border-radius: 2%; */
+    border: solid black;
+    &:hover{
+      transform: translateY(-10px);
+      transition: transform 0.5s;
+    }
+    
+    &:not(:hover){
+      transition: transform 0.5s;
+    }
+  `
+
+    const CardData = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin: 2px 0px;
+    padding: 5px;
+    cursor: pointer;
+    `
+
 const Caption=styled.h1`
    font-family: 'Oswald';
    font-size:1rem;

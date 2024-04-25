@@ -74,8 +74,13 @@ contract MediLedger {
 }
 
 contract Patient {
-    event allBills(uint timestamp, string hash);
-    event refunds(uint timestamp, uint amount);
+    event allBills(
+        address indexed Doctor,
+        uint indexed amount,
+        uint indexed timestamp,
+        string hash
+    );
+    event refunds(uint indexed amount, uint indexed timestamp);
 
     string public name;
     uint public pid;
@@ -86,8 +91,6 @@ contract Patient {
     string public bloodgrp;
 
     address public admin;
-    string[] public pendingBills;
-    string[] public passedBills;
     address[] public allDoctorsWallets;
 
     address public accounts;
@@ -123,20 +126,16 @@ contract Patient {
 
     function passBill() public payable {
         require(msg.sender == accounts, "You're not authorized");
-        walletid.transfer(pendingRefund);
-        for (uint i = 0; i < pendingBills.length; i++) {
-            passedBills.push(pendingBills[i]);
-        }
-        pendingBills = new string[](0);
-        emit refunds(block.timestamp, pendingRefund);
+        walletid.transfer(msg.value);
+        uint temp = pendingRefund;
         pendingRefund = 0;
+        emit refunds(temp, block.timestamp);
     }
 
     function addBill(string memory _hash, uint amount) public payable {
         require(isDoctor(msg.sender) == true, "You're not authorized");
-        pendingBills.push(_hash);
         pendingRefund += amount;
-        emit allBills(block.timestamp, _hash);
+        emit allBills(msg.sender, amount, block.timestamp, _hash);
     }
 
     function isDoctor(address docadd) public view returns (bool) {

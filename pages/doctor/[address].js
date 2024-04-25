@@ -16,11 +16,16 @@ import lighthouse from '@lighthouse-web3/sdk'
 
    const [uploadLoading, setUploadLoading] = useState(false);
    const [uploaded, setUploaded] = useState(false);
-
-    const [fileUrl, setFileUrl] = useState("");
-
    const [file, setFile] = useState(null);
    const [amt, setAmt] = useState("");
+
+   const [hash, setHash] = useState(null);
+
+   useEffect(() => {
+     console.log("hash changed:", hash);
+     toast.success("File Uploaded to IPFS");
+      addBill();
+    }, [hash]);
 
    const FileHandler = (e) => {
        setFile(e.target.files);
@@ -43,14 +48,11 @@ import lighthouse from '@lighthouse-web3/sdk'
         console.log("File Status:", output);
   
         console.log(
-          "Visit at https://gateway.lighthouse.storage/ipfs/" + output.data.Hash
+          "hihih Visit at https://gateway.lighthouse.storage/ipfs/" + output.data.Hash
         );
-        
-        const ImageHash = `https://gateway.lighthouse.storage/ipfs/${output.data.Hash}`;
-        setFileUrl(output.data.Hash);
-        console.log(fileUrl);
-        toast.success("File Uploaded to IPFS");
-        addBill();
+        const h =""+output.data.Hash+"";
+        console.log("h= "+h);
+        setHash(h);
       } catch (error) {
         console.log(error);
         toast.warn("Error Uploading File");
@@ -62,31 +64,33 @@ import lighthouse from '@lighthouse-web3/sdk'
      const signer = provider.getSigner();
     
      console.log("1-------")
-          const patient = new ethers.Contract(
+     const patient = new ethers.Contract(
             Data.address,
             Patient.abi,
             signer
-          );
-     console.log("2-------")
-     console.log(amt);
-     const billamt = parseInt(amt);
-     console.log("3-------");
-     console.log(signer.getAddress());
-     const isdoc = await patient.isDoctor(signer.getAddress());
-     console.log(isdoc);
+     );
+     try
+     {
+          console.log("bill amount = "+amt);
+         const billamt = parseInt(amt);
+          console.log(signer.getAddress());
+          const isdoc = await patient.isDoctor(signer.getAddress());
+          console.log("is doctor current account ="+isdoc);
      
-     console.log(fileUrl);
+          console.log("current file hash ------> "+hash);
           const addData = await patient.addBill(
-            fileUrl,
+            hash,
             billamt
           );
-    console.log("4-------")
-     await addData.wait();
-     console.log("5-------")
-       setUploadLoading(false);
-       setUploaded(true);
+          await addData.wait();
+          setUploadLoading(false);
+          setUploaded(true);
        
-       toast.success("Document Uploaded Sucessfully")
+          toast.success("Document Uploaded Sucessfully")
+     } catch (e)
+     {
+       console.log(e);
+     }
      
    }
 
