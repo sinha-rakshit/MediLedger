@@ -10,7 +10,7 @@ const addPatient = () => {
         <Caption>
             THE RIGHT TECHNOLOGY CAN MAKE A DIFFERENCE   
         </Caption>
-        <Text><Paragraph>Please fill up the details very carefully.Every field is mandatory. </Paragraph></Text>
+        <Paragraph>Please fill up the details very carefully.Every field is mandatory. </Paragraph>
        
         
     </FormTopWrap>  

@@ -9,18 +9,18 @@ const TopLeft = () => {
     <TopLeftWrap>
         <Paragraph>We Bring Forward</Paragraph>
         <Heading>MEDILEDGER</Heading>
-        <Text><Paragraph>A blockchain-based medical management decentralised application for NIT PATNA</Paragraph> 
-        <Paragraph>built primarily to provide transparancy in reimbuirsements and medical records</Paragraph></Text>
+        <Paragraph>A blockchain-based medical management decentralised application for NIT PATNA</Paragraph> 
+        <Paragraph>built primarily to provide transparancy in reimbuirsements and medical records</Paragraph>
         
         <Caption>
             BUILD TO LAST
             NOT TOO FAST
         </Caption>
-        <Text><Paragraph>To contribute . Please click here </Paragraph></Text>
+        <Paragraph>To contribute . Please click here </Paragraph>
         <ButtonWrap><Link  style={{textDecoration:'none'}} href="/" > <TNavLinks active={Router.pathname=="/"?true:false}>
         Home
       </TNavLinks></Link></ButtonWrap>
-        <Text><Paragraph>Scroll down  to know more</Paragraph></Text>
+       <Paragraph>Scroll down  to know more</Paragraph>
        
         
     </TopLeftWrap>    

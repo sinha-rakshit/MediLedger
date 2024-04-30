@@ -6,8 +6,8 @@ const ErrorPage = () => {
     return (
         <FormWrap>
           <TopLeftWrap>
-            <Heading>Error</Heading>
-            <TextH><Paragraph>You do not have the necessary permissions to access this page. </Paragraph></TextH>
+          <Heading>Error</Heading>
+          <Paragraph>You do not have the necessary permissions to access this page. </Paragraph>
             <ButtonWrap><Link style={{textDecoration:'none', color:'black'}} href={'/'}>
                  Home</Link></ButtonWrap>
           </TopLeftWrap>

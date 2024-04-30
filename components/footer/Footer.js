@@ -7,7 +7,6 @@ import FooterMain from "./components/FooterMain";
 const Footer = () => {
   return (
     <Wrapper>
-      <FooterHeader/>
       <FooterMain />
       <FooterFoot />
       </Wrapper>

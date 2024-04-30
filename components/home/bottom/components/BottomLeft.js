@@ -9,13 +9,13 @@ const BottomLeft = () => {
     <BottomHomeLeftWrap>
         <Paragraph>Become a part of </Paragraph>
         <Heading>MEDILEDGER</Heading>
-        <Text><Paragraph>A secure, transparent, and efficient platform for managing medical records and reimbursement processes.</Paragraph></Text>
+        <Paragraph>A secure, transparent, and efficient platform for managing medical records and reimbursement processes.</Paragraph>
         
         <Caption>
             A DIGITALLY SMARTER SOLUTION
             
         </Caption>
-        <Text><Paragraph>To visit patient details click below </Paragraph></Text>
+        <Paragraph>To visit patient details click below </Paragraph>
         <ButtonWrap><Link  style={{textDecoration:'none'}} href="/" > <TNavLinks active={Router.pathname=="/"?true:false}>
         All Patients
       </TNavLinks></Link></ButtonWrap>

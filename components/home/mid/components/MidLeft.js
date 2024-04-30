@@ -9,18 +9,18 @@ const MidLeft = () => {
     <MidHomeLeftWrap>
         
         <Heading>WHY MEDILEDGER?</Heading>
-        <Text><Paragraph> Facilitates Seamless Financial Transactions</Paragraph></Text>
+        <Paragraph> Facilitates Seamless Financial Transactions</Paragraph>
         
         <Caption>
             NO PAPERWORK
             NO DELAYS 
         </Caption>
-      <Text><Paragraph> Access your health records from anywhere. </Paragraph></Text>
-      <Text><Paragraph> Get Registered </Paragraph></Text>
+      <Paragraph> Access your health records from anywhere. </Paragraph>
+      <Paragraph> Get Registered </Paragraph>
         <ButtonWrap><Link  style={{textDecoration:'none'}} href="/addPatient" > <TNavLinks active={Router.pathname=="/addPatient"?true:false}>
         Register Patient
       </TNavLinks></Link></ButtonWrap>
-        <Text><Paragraph>Scroll down  to see more </Paragraph></Text>
+       <Paragraph>Scroll down  to see more </Paragraph>
        
         
     </MidHomeLeftWrap>    

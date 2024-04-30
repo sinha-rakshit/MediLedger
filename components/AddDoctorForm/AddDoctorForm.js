@@ -82,15 +82,15 @@ const AddDoctorForm = () => {
               <Address>
                   <TopLeftWrap>
                      <Heading>Hola!!</Heading>
-                     <Text><Paragraph>Doctor has been added Sucessfully</Paragraph></Text>
+                     <Paragraph>Doctor has been added Sucessfully</Paragraph>
         
                      <Caption>Have a healthy life!!</Caption>
-                     <Text><Paragraph>The doctor account is now deployed at address:  </Paragraph></Text>
-                     <Text><Paragraph>{address}</Paragraph></Text>
-                     <Text><Paragraph>We encourage you to keep a copy of it for future reference </Paragraph></Text>
-                     <Text><Paragraph>To see details </Paragraph></Text>
+                     <Paragraph>The doctor account is now deployed at address:  </Paragraph>
+                     <Paragraph>{address}</Paragraph>
+                     <Paragraph>We encourage you to keep a copy of it for future reference </Paragraph>
+                     <Paragraph>To see details </Paragraph>
                      <ButtonWrap><Link  style={{textDecoration:'none'}} href="/" > <TNavLinks active={Router.pathname=="/pendingcontract"?true:false}>Click Here</TNavLinks></Link></ButtonWrap>
-                     <Text><Paragraph>Best Of Luck!! </Paragraph></Text>
+                     <Paragraph>Best Of Luck!! </Paragraph>
        
         
                   </TopLeftWrap>

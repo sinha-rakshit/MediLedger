@@ -48,8 +48,6 @@ const AddPatientForm = () => {
         toast.warn("Pateint Name field is Empty")
       }else if(form.walletid === ""){
        toast.warn("Wallet id field is Empty");
-      }else if(form.gender === ""){
-       toast.warn("Gender field is Empty");
       }else if(form.allergies === ""){
        toast.warn("allergies field is Empty");
       }else if(form.bloodgrp === ""){
@@ -110,15 +108,15 @@ const AddPatientForm = () => {
               <Address>
                   <TopLeftWrap>
                      <Heading>Hola!!</Heading>
-                     <Text><Paragraph>Patient has been added Sucessfully</Paragraph></Text>
+                     <Paragraph>Patient has been added Sucessfully</Paragraph>
         
                      <Caption>Have a healthy life!!</Caption>
-                     <Text><Paragraph>The patient account is now deployed at address:  </Paragraph></Text>
-                     <Text><Paragraph>{address}</Paragraph></Text>
-                     <Text><Paragraph>We encourage you to keep a copy of it for future reference </Paragraph></Text>
-                     <Text><Paragraph>To see patient details  </Paragraph></Text>
+                     <Paragraph>The patient account is now deployed at address:  </Paragraph>
+                     <Paragraph>{address}</Paragraph>
+                     <Paragraph>We encourage you to keep a copy of it for future reference </Paragraph>
+                     <Paragraph>To see patient details  </Paragraph>
                      <ButtonWrap><Link  style={{textDecoration:'none'}} href="/" > <TNavLinks active={Router.pathname=="/"?true:false}>Click Here</TNavLinks></Link></ButtonWrap>
-                     <Text><Paragraph>Best Of Luck!! </Paragraph></Text>
+                     <Paragraph>Best Of Luck!! </Paragraph>
        
         
                   </TopLeftWrap>

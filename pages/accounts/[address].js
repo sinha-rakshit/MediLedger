@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { toast } from "react-toastify";
+import {TailSpin} from 'react-loader-spinner'
 
 
 export default function Accounts({ Data , MyBills , MyRefunds }) {
@@ -14,6 +15,9 @@ export default function Accounts({ Data , MyBills , MyRefunds }) {
   const [change, setChange] = useState(false);
   const [filterBills, setFilterBills] = useState(MyBills);
   const [filterRefunds, setFilterRefunds] = useState(MyRefunds);
+  
+   const [uploadLoading, setUploadLoading] = useState(false);
+   const [uploaded, setUploaded] = useState(false);
   
    useEffect(() => {
     const Request = async () => {
@@ -42,7 +46,8 @@ export default function Accounts({ Data , MyBills , MyRefunds }) {
     
    
    const reimburse = async () => {
-      try{
+     try {
+        setUploadLoading(true);
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
          console.log("0++++++++++++")
@@ -57,6 +62,11 @@ export default function Accounts({ Data , MyBills , MyRefunds }) {
           console.log("2++++++++++++")
         await passed.wait();
         console.log("3++++++++++++")
+
+        
+          setUploadLoading(false);
+        setUploaded(true);
+        
         toast.success("Reimburse,Please refresh !!!")
       
       setChange(true);
@@ -70,15 +80,15 @@ export default function Accounts({ Data , MyBills , MyRefunds }) {
       <TopLeftWrap>
         <Paragraph>Here we have our</Paragraph>
         <Heading>Account Section Portal</Heading>
-        <Text><Paragraph>Where Account Section Clear Pending Reimbursement Instantly</Paragraph> 
-        <Paragraph>Maximizing Efficiency , Minimizing Paperwork</Paragraph></Text>
-        <Text><Paragraph>Pending to Paid in Just One Click , Zero Hassle</Paragraph> </Text>
+        <Paragraph>Where Account Section Clear Pending Reimbursement Instantly</Paragraph> 
+        <Paragraph>Maximizing Efficiency , Minimizing Paperwork</Paragraph>
+        <Paragraph>Pending to Paid in Just One Click , Zero Hassle</Paragraph>
         <Caption>
             Streamlined Finance , Instant Refunds
         </Caption>
-        <Text><Paragraph> Where Blockchain Meets Billing Management </Paragraph></Text>
+        <Paragraph> Where Blockchain Meets Billing Management </Paragraph>
         <ButtonWrap><TNavLinks>Transparent and Secure Records,Seamless Reimbursements</TNavLinks></ButtonWrap>
-        <Text><Paragraph> Financial Management Made Easy </Paragraph></Text>
+        <Paragraph> Financial Management Made Easy </Paragraph>
       </TopLeftWrap>    
 
 
@@ -102,42 +112,45 @@ export default function Accounts({ Data , MyBills , MyRefunds }) {
                 <FundTextTitle>Pateint Wallet Id</FundTextTitle>
                   <FundTextContent>{Data.walletid.slice(0,6)}...{Data.walletid.slice(39)}</FundTextContent> 
               </Funds>  
-            </FundsData> 
-        <DonateSection>
+        </FundsData> 
+        <FundsData>
             <Funds>
                 <FundTextTitle>Pending Reimbursement</FundTextTitle>
-                <FundTextContent>{ethers.utils.formatEther(Data.pendingRefund)}</FundTextContent> 
-            </Funds>   
-          <Funds>
-              <Button onClick={reimburse}>
-                Reimburse
-            </Button>
-            </Funds>
-         </DonateSection>
+                <FundTextContent>{Data.pendingRefund} ETH</FundTextContent> 
+             </Funds>  
+
+            {uploadLoading == true ? <Buttons><TailSpin color='#fff' height={20} /></Buttons> :uploaded == false ? 
+                <Funds><Button onClick={reimburse}>
+                   Reimburse
+                </Button></Funds>
+                : <Funds><Button style={{cursor: "no-drop"}}>Transaction Completed Sucessfully</Button></Funds>
+            }
+        </FundsData>
+         
       </RightContainer>
+      <Heading>All Bills</Heading>
       <CardsWrapper>
-            <CardData>ALL BILLS</CardData>
             {filterBills.map((e) => {
               return (
                 
-                <Card key={e.timestamp}>
-                <CardData>{e.doctor.slice(0,6)}...{e.doctor.slice(39)}</CardData>
-                <CardData>{e.amount} ETH</CardData>
-                  <CardData>{new Date(e.timestamp * 1000).toLocaleString()}</CardData>
-                  <CardData><Link style={{textDecoration:'none'}} href={'https://gateway.lighthouse.storage/ipfs/' + e.hash}>Report and Bill</Link></CardData>
+              <Card key={e.timestamp}>
+                  <CardData><Bold>Doctor : </Bold> {e.doctor.slice(0,6)}...{e.doctor.slice(39)}</CardData>
+                  <CardData><Bold>Bill Amount : </Bold>{e.amount} ETH</CardData>
+                  <CardData><Bold>Date and Time : </Bold>{new Date(e.timestamp * 1000).toLocaleString()}</CardData>
+                  <CardData><TNavLinks><Link style={{textDecoration:'none'}} href={'https://gateway.lighthouse.storage/ipfs/' + e.hash}><Button>Report and Bill</Button></Link></TNavLinks></CardData>
               </Card>
               )
             })
         }
        </CardsWrapper> 
+       <Heading>My Refunds</Heading>
        <CardsWrapper>
-            <CardData>MY REFUNDS</CardData>
             {filterRefunds.map((e) => {
               return (
                 <Card key={e.timestamp}>
-                <CardData>{e.amount} ETH</CardData>
-                <CardData>{new Date(e.timestamp * 1000).toLocaleString()}</CardData>
-              </Card>
+                  <CardData><Bold>Amount : </Bold>{e.amount} ETH</CardData>
+                  <CardData><Bold>Date and Time : </Bold>{new Date(e.timestamp * 1000).toLocaleString()}</CardData>
+                </Card>
               )
             })
             }
@@ -202,7 +215,7 @@ export async function getStaticProps(context){
         const MyBills = MyAllBills.map((e) => {
         return {
           doctor: e.args.Doctor,
-          amount: ethers.utils.formatEther(e.args.amount),
+          amount:parseInt(e.args.amount),
           timestamp: parseInt(e.args.timestamp),
           hash: e.args.hash
         }
@@ -213,7 +226,7 @@ export async function getStaticProps(context){
 
         const MyRefunds=MyAllRefunds.map((e) => {
         return {
-          amount: ethers.utils.formatEther(e.args.amount),
+          amount: parseInt(e.args.amount),
           timestamp: parseInt(e.args.timestamp)
         }
         });
@@ -255,10 +268,6 @@ const FundTextContent = styled.p`
   font-family: "Poppins";
   font-size: normal;
 `;
-
-const Update=styled.div`
-width: 100%;
-`
 const DetailWrapper = styled.div`
   
   display: flex;
@@ -268,33 +277,9 @@ const DetailWrapper = styled.div`
   padding: 20px;
   width: 98%;
 `;
-const LeftContainer = styled.div`
-  width: 45%;
-  padding-top: 5rem;
-  
-`;
 const RightContainer = styled.div`
   width: 50%;
   padding-top: 5rem;
-`;
-const BottomContainer=styled.div`
-  width: 50%;
-  padding-top: 10rem;
-  width:48%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  
-`
-
-const Title = styled.h1`
-  padding-bottom: 3rem;
-  margin: 0;
-  text-align: center;
-  font-family: "Comfortaa";
-  font-size: x-large;
-  color: ${(props) => props.theme.color};
 `;
 const DonateSection = styled.div`
   display: flex;
@@ -302,30 +287,6 @@ const DonateSection = styled.div`
   justify-content:space-between;
   align-items: center;
   margin-top: 10px;
-`;
-const Textarea = styled.textarea`
-  padding: 8px 15px;
-  background-color: ${(props) => props.theme.detail};
-  color: ${(props) => props.theme.color};
-  //border: none;
-  border-radius: 8px;
-  //outline: none;
-  ::placeholder{
-    color:${(props) => props.theme.colorDiv} ;
-  }
-  font-size: large;
-`;
-const Donate = styled.button`
-  display: flex;
-  justify-content: center;
-  width: 45%;
-  padding: 15px;
-  color: white;
-  background-color: ${(props) => props.theme.btnDetail};
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: large;
 `;
 
 const TNavLinks=styled.div`
@@ -387,6 +348,7 @@ const CardsWrapper = styled.div`
     &:not(:hover){
       transition: transform 0.5s;
     }
+    background-color: ${(props) => props.theme.detail};
   `
 
     const CardData = styled.div`
@@ -427,6 +389,17 @@ const Paragraph=styled.p`
    text-align: center;
    font-family: 'Poppins';
    font-style: bold;
+`
+
+const Bold=styled.p`
+   margin:0;
+   font-size: 1rem;
+   padding: 0;
+   font-weight: 500;
+   text-align: center;
+   font-family: 'Poppins';
+   font-style: bold;
+   font-weight:bolder;
 `
 const ButtonWrap = styled.button`
 margin-bottom: 10px;
@@ -469,26 +442,6 @@ const FundTextTitle = styled.p`
   color:${(props) => props.theme.colorDiv} ;
 `;
 
-const FormInput = styled.div`
-  display:flex ;
-  flex-direction:column;
-  font-family:'poppins';
-  margin-top:10px ;
-`
-const Input = styled.input`
-  padding:15px;
-  color:${(props) => props.theme.color} ;
-  margin-top:4px;
-  ::placeholder{
-    font-size: smaller;
-    color: lightslategrey;
-  }
-  border:1px solid ${(props) => props.theme.bgDiv};
-  outline:none;
-  font-size:large;
-  width:100% ;
-`
-
 const Button = styled.button`
     
     text-align: center;
@@ -500,6 +453,27 @@ const Button = styled.button`
     text-transform: uppercase;
     border-radius: 5px;
     height: 3.5rem;
+    &:hover{
+      background-color: ${(props) => props.theme.colorSec} ;
+      color:${(props) => props.theme.color} ;
+      transform: translateY(-2px);
+      transition: transform 0.5s;
+    }
+    color:${(props) => props.theme.colorDiv} ;
+    font-size: 14px;
+    font-weight: bold;
+  `
+  const Buttons = styled.button`
+    
+    text-align: center;
+    width: 47%;
+    background-color: ${(props) => props.theme.btnColor};
+    border: none;
+    cursor: pointer;
+    font-family: 'Comfortaa';
+    text-transform: uppercase;
+    border-radius: 5px;
+    height: 4.5rem;
     &:hover{
       background-color: ${(props) => props.theme.colorSec} ;
       color:${(props) => props.theme.color} ;

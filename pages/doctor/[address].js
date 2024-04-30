@@ -23,7 +23,6 @@ import lighthouse from '@lighthouse-web3/sdk'
 
    useEffect(() => {
      console.log("hash changed:", hash);
-     toast.success("File Uploaded to IPFS");
       addBill();
     }, [hash]);
 
@@ -102,15 +101,15 @@ import lighthouse from '@lighthouse-web3/sdk'
         <TopLeftWrap>
         <Paragraph>Documents will be uploaded here by</Paragraph>
         <Heading>OUR BEST DOCTORS</Heading>
-        <Text><Paragraph>Empowering Physicians , Enhancing Patient Outcomes</Paragraph> 
-        <Paragraph>Doctors At The Helm of HealthCare Transformation</Paragraph></Text>
+        <Paragraph>Empowering Physicians , Enhancing Patient Outcomes</Paragraph> 
+        <Paragraph>Doctors At The Helm of HealthCare Transformation</Paragraph>
         
         <Caption>
             Elevating Healthcare Standards
         </Caption>
-        <Text><Paragraph>Secure Prescriptions , Seamless Billing , Simplified Workflow</Paragraph></Text>
+        <Paragraph>Secure Prescriptions , Seamless Billing , Simplified Workflow</Paragraph>
         <ButtonWrap>In Just Few Clicks</ButtonWrap>
-        <Text><Paragraph>Manage Everything through a simple form</Paragraph></Text>
+        <Paragraph>Manage Everything through a simple form</Paragraph>
        
         
     </TopLeftWrap>  

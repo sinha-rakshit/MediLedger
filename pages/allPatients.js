@@ -24,13 +24,13 @@ import {useRouter} from 'next/router';
           <TopLeftWrap>
         <Paragraph>See all your patients </Paragraph>
         <Heading>THE PATIENT WINDOW</Heading>
-        <TextH><Paragraph>All your accounts are shown below</Paragraph></TextH>
+        <Paragraph>All your accounts are shown below</Paragraph>
         
-        <TextH><Paragraph>If not registered yet </Paragraph></TextH>
+        <Paragraph>If not registered yet </Paragraph>
         <ButtonWrap><Link  style={{textDecoration:'none'}} href="/addPatient" > <TNavLinks active={Router.pathname=="/addPatient"?true:false}>
         GET REGISTERED NOW!!
       </TNavLinks></Link></ButtonWrap>
-        <TextHLast><Paragraph>Scroll down  to find your account !! </Paragraph></TextHLast>
+      <Paragraph>Scroll down  to find your account !! </Paragraph>
        
         
     </TopLeftWrap>    

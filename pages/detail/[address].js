@@ -28,15 +28,15 @@ import { TailSpin } from 'react-loader-spinner'
         <TopLeftWrap>
         <Paragraph>Here we have our</Paragraph>
         <Heading>Patient Details</Heading>
-        <Text><Paragraph>Empowering Patients</Paragraph> 
-        <Paragraph>Decentralizing for Accessibility , Privacy and Trust</Paragraph></Text>
-        <Text><Paragraph>Transforming HealthCare One Block At A Time</Paragraph> </Text>
+        <Paragraph>Empowering Patients</Paragraph> 
+        <Paragraph>Decentralizing for Accessibility , Privacy and Trust</Paragraph>
+        <Paragraph>Transforming HealthCare One Block At A Time</Paragraph>
         <Caption>
             Your Health , Your Data , Your Blockchain
         </Caption>
-        <Text><Paragraph> Where Blockchain Meets Medical Records </Paragraph></Text>
+        <Paragraph> Where Blockchain Meets Medical Records </Paragraph>
         <ButtonWrap><TNavLinks>Transparent and Secure Records,Seamless Reimbursements</TNavLinks></ButtonWrap>
-        <Text><Paragraph>Patient Centric Solutions </Paragraph></Text>
+        <Paragraph>Patient Centric Solutions </Paragraph>
        
         
     </TopLeftWrap>    
